@@ -21,13 +21,13 @@ router
 
 .post("/", async (req, res) => {
     const repository = {
-        projectName: req.body.projectName,
+        project_name: req.body.project_name,
         languaje: req.body.languaje,
-        createdAt: req.body.createdAt,
+        created_at: new Date(),
         description: req.body.description,
     }
 
-    if (!repository.projectName || !repository.languaje || !repository.createdAt) {
+    if (!repository.project_name || !repository.languaje || !repository.created_at) {
         return res.status(400).json({
             error: "Faltan datos"
         });
@@ -35,13 +35,13 @@ router
 
     // Verifica que el nombre del repositorio no tenga caracteres no deseados
     const stringTest = (str) => /^[a-z0-9-*~][a-z0-9-*._~][a-z0-9-~][a-z0-9-._~]*$/.test(str);
-    if (!stringTest(repository.projectName)) {
+    if (!stringTest(repository.project_name)) {
         return res.status(400).json({
             error: "Nombre de proyecto no valido"
         });
     }
     
-    const exists = await repositoriesController.getByName(repository.projectName);
+    const exists = await repositoriesController.getByName(repository.project_name);
     if(exists[0]){
         return res.status(400).json({
             error: "Nombre de repositorio no disponble"
@@ -69,21 +69,21 @@ router
         });
     }
     const { id } = req.params;
-    const { projectName, languaje, description } = req.body;
+    const { project_name, languaje, description } = req.body;
     const found = await repositoriesController.getById(id);
     if (!found[0]) {
         return res.status(404).json({
             error: "Repositorio no encontrado",
         });
     }
-    const nameFound = await repositoriesController.getByName(projectName);
+    const nameFound = await repositoriesController.getByName(project_name);
     if (nameFound[0]) {
         return res.status(404).json({
             error: "Nombre en uso",
         });
     }
     const repository = {
-        projectName: projectName || found[0].projectName,
+        project_name: project_name || found[0].project_name,
         languaje: languaje || found[0].languaje,
         description: description || found[0].description,
     }

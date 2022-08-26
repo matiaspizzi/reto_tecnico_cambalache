@@ -1,20 +1,18 @@
 const knex = require('../db/knex.config')
 
-class UserController{
+class LogHistoryController{
     constructor(){
-        this.table = 'users'
-        
-        knex.schema.hasTable('users').then(function(exists) {
+        this.table = 'log_history'
+
+        knex.schema.hasTable('log_history').then(function(exists) {
             if (!exists) {
-                return knex.schema.createTable('users', function(t) {
+                return knex.schema.createTable('log_history', function(t) {
                     t.increments('id').primary();
-                    t.string('name', 100).notNullable();
-                    t.string('email', 100).notNullable();
-                    t.date('birth_date', 6).notNullable();
-                    t.enum('favourite_languaje', ['JavaScript', 'Python', 'Java', '.Net', 'PHP']);
-                    t.string('password', 100).notNullable();
+                    t.datetime('date_time').defaultTo(knex.fn.now()).notNullable();
+                    t.enum('type', ['login', 'logout', 'signup']).notNullable();
+                    t.string('user_id').notNullable();
                 }).then(() => {
-                    console.log('Users table created')
+                    console.log('log_history table created')
                 }).catch((err) => {
                     console.log(err)
                     throw err
@@ -32,9 +30,9 @@ class UserController{
         } 
     }
     
-    async getByEmail(email){
+    async getByUserId(id){
         try{
-            return await knex.from(`${this.table}`).where({ email: email }).select()
+            return await knex.from(`${this.table}`).where({ user_id: id }).select()
         } catch(err) {
             console.log(err)
             throw err
@@ -59,15 +57,6 @@ class UserController{
         }
     }
     
-    async update(obj, id){
-        try{
-            return await knex(`${this.table}`).update(obj).where({ id: id })
-        } catch(err) {
-            console.log(err)
-            throw err
-        }
-    }
-
     async deleteById(id){
         try{
             return await knex.from(`${this.table}`).where({ id: id }).del()
@@ -78,6 +67,6 @@ class UserController{
     }
 }
 
-let controllerInstance = new UserController()
+let controllerInstance = new LogHistoryController()
 
 module.exports = controllerInstance

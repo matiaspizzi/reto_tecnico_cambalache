@@ -7,7 +7,7 @@ const knex = require('knex')({
         database: process.env.DB_NAME,
         timezone: 'UTC-3',
     },
-    pool: { min: 0, max: 7 },
+    pool: { min: 0, max: 10 },
 });
 
 module.exports = knex;

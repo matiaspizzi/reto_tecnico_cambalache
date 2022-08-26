@@ -1,4 +1,4 @@
-const knex = require('../db/database');
+const knex = require('../db/knex.config');
 
 class RepositoriesController{
     constructor(){
@@ -8,9 +8,9 @@ class RepositoriesController{
             if (!exists) {
                 return knex.schema.createTable('repositories', function(t) {
                     t.increments('id').primary();
-                    t.string('projectName', 100).notNullable();
-                    t.enum('languaje', ['JavaScript', 'Python']).notNullable();
-                    t.date('createdAt', 100).notNullable();
+                    t.string('project_name', 100).notNullable();
+                    t.enum('languaje', ['JavaScript', 'Python', 'Java', '.Net', 'PHP']).notNullable();
+                    t.datetime('created_at').defaultTo(knex.fn.now()).notNullable();
                     t.string('description', 100);
                 }).then(() => {
                     console.log('Repositories table created')
@@ -33,7 +33,7 @@ class RepositoriesController{
     
     async getByName(name){
         try{
-            return await knex.from(`${this.table}`).where({ projectName: name }).select()
+            return await knex.from(`${this.table}`).where({ project_name: name }).select()
         } catch(err) {
             console.log(err)
             throw err
@@ -77,6 +77,6 @@ class RepositoriesController{
     }
 }
 
-let RepositoriesControllerInstance = new RepositoriesController()
+let controllerInstance = new RepositoriesController()
 
-module.exports = RepositoriesControllerInstance
+module.exports = controllerInstance

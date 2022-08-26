@@ -1,10 +1,9 @@
-const express = require("express");
 require('dotenv').config()
-const http = require("http");
+const express = require("express");
 const morgan = require("morgan");
+const verifyToken = require("./middlewares/auth.middlewares");
 
 const app = express();
-const server = http.createServer(app);
 
 // Middlewares
 app.use(express.json());
@@ -12,9 +11,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 //Rutas
 app.use("/api/users", require("./routes/users.routes.js"));
-app.use("/api/repositories", require("./routes/repositories.routes.js"));
-// app.use("/api/login-history", require("./routes/loginHistory.routes.js"));
-app.use("/login", require("./routes/login.routes.js"));
+app.use("/api/repositories", verifyToken, require("./routes/repositories.routes.js"));
+app.use("/api/log-history", verifyToken, require("./routes/logHistory.routes.js"));
+app.use("/", require("./routes/log.routes.js"));
 
 app.use(function (req, res) {
     if (res.status(404)) {
@@ -26,7 +25,7 @@ app.use(function (req, res) {
 });
 
 const PORT = process.env.PORT || 3030;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(
         `Server listening on ${PORT}`
     );
