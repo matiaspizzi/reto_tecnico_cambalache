@@ -19,10 +19,10 @@ router.post("/login", async (req, res) => {
     }
 
     // Crea jwt
-    const accesToken = jwt.sign({ id: user[0].id }, process.env.JWT_ACCES_KEY, {
+    const accessToken = jwt.sign({ id: user[0].id }, process.env.JWT_ACCESS_KEY, {
         expiresIn: process.env.JWT_TIME
     });
-    await redisClient.set(user[0].id.toString(), accesToken);
+    await redisClient.set(user[0].id.toString(), accessToken);
 
     // Guardar log de inicio de sesión
     await logHistoryController.save({
@@ -31,8 +31,8 @@ router.post("/login", async (req, res) => {
         user_id: user[0].id
     });
 
-    res.send({
-        accesToken,
+    return res.send({
+        accessToken,
         user: user[0]
     });
 })
@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
     .post("/logout", verifyToken, async (req, res) => {
         try {
             const token = req.headers["auth_token"];
-            jwt.verify(token, process.env.JWT_ACCES_KEY, async (err, decoded) => {
+            jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, decoded) => {
                 if (err) {
                     return res.status(401).json({
                         error: err
@@ -55,20 +55,20 @@ router.post("/login", async (req, res) => {
                     user_id: decoded.id
                 });
 
-                res.send({
+                return res.send({
                     id: decoded.id,
                     msg: "Logout correcto"
                 });
             });
         } catch (err) {
-            res.status(500).json({
+            return res.status(500).json({
                 error: err
             });
         }
     })
 
     .post('/signup', function (_req, res) {
-        res.redirect(307, '/api/users');
+        return res.redirect(307, '/api/users');
     });
 
 module.exports = router;

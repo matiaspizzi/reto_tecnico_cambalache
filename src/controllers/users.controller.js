@@ -1,17 +1,17 @@
 const knex = require('../db/knex.config')
 
-class UserController{
-    constructor(){
+class UserController {
+    constructor() {
         this.table = 'users'
-        
-        knex.schema.hasTable('users').then(function(exists) {
+
+        knex.schema.hasTable('users').then(function (exists) {
             if (!exists) {
-                return knex.schema.createTable('users', function(t) {
+                return knex.schema.createTable('users', function (t) {
                     t.increments('id').primary();
                     t.string('name', 100).notNullable();
                     t.string('email', 100).notNullable();
                     t.date('birth_date', 6).notNullable();
-                    t.enum('favourite_languaje', ['JavaScript', 'Python', 'Java', '.Net', 'PHP']);
+                    t.enum('favourite_language', ['JavaScript', 'Python', 'Java', '.Net', 'PHP']);
                     t.string('password', 100).notNullable();
                 }).then(() => {
                     console.log('Users table created')
@@ -23,55 +23,55 @@ class UserController{
         });
     }
 
-    async getAll(){
-        try{
+    async getAll() {
+        try {
             return await knex.from(`${this.table}`).select("*")
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
-        } 
+        }
     }
-    
-    async getByEmail(email){
-        try{
+
+    async getByEmail(email) {
+        try {
             return await knex.from(`${this.table}`).where({ email: email }).select()
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }
     }
 
-    async getById(id){
-        try{
+    async getById(id) {
+        try {
             return await knex.from(`${this.table}`).where({ id: id }).select()
-        } catch(err) {
-            console.log(err)
-            throw err
-        }
-    }
-    
-    async save(obj){
-        try{
-            return await knex(`${this.table}`).insert(obj)
-        } catch(err) {
-            console.log(err)
-            throw err
-        }
-    }
-    
-    async update(obj, id){
-        try{
-            return await knex(`${this.table}`).update(obj).where({ id: id })
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }
     }
 
-    async deleteById(id){
-        try{
+    async save(obj) {
+        try {
+            return await knex(`${this.table}`).insert(obj)
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    }
+
+    async update(obj, id) {
+        try {
+            return await knex(`${this.table}`).update(obj).where({ id: id })
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    }
+
+    async deleteById(id) {
+        try {
             return await knex.from(`${this.table}`).where({ id: id }).del()
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }

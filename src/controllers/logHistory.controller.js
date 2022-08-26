@@ -1,12 +1,12 @@
 const knex = require('../db/knex.config')
 
-class LogHistoryController{
-    constructor(){
+class LogHistoryController {
+    constructor() {
         this.table = 'log_history'
 
-        knex.schema.hasTable('log_history').then(function(exists) {
+        knex.schema.hasTable('log_history').then(function (exists) {
             if (!exists) {
-                return knex.schema.createTable('log_history', function(t) {
+                return knex.schema.createTable('log_history', function (t) {
                     t.increments('id').primary();
                     t.datetime('date_time').defaultTo(knex.fn.now()).notNullable();
                     t.enum('type', ['login', 'logout', 'signup']).notNullable();
@@ -21,46 +21,46 @@ class LogHistoryController{
         });
     }
 
-    async getAll(){
-        try{
+    async getAll() {
+        try {
             return await knex.from(`${this.table}`).select("*")
-        } catch(err) {
-            console.log(err)
-            throw err
-        } 
-    }
-    
-    async getByUserId(id){
-        try{
-            return await knex.from(`${this.table}`).where({ user_id: id }).select()
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }
     }
 
-    async getById(id){
-        try{
+    async getByUserId(id) {
+        try {
+            return await knex.from(`${this.table}`).where({ user_id: id }).select()
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    }
+
+    async getById(id) {
+        try {
             return await knex.from(`${this.table}`).where({ id: id }).select()
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }
     }
-    
-    async save(obj){
-        try{
+
+    async save(obj) {
+        try {
             return await knex(`${this.table}`).insert(obj)
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }
     }
-    
-    async deleteById(id){
-        try{
+
+    async deleteById(id) {
+        try {
             return await knex.from(`${this.table}`).where({ id: id }).del()
-        } catch(err) {
+        } catch (err) {
             console.log(err)
             throw err
         }

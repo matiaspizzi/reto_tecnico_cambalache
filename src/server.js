@@ -9,6 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
+
+
 //Rutas
 app.use("/api/users", require("./routes/users.routes.js"));
 app.use("/api/repositories", verifyToken, require("./routes/repositories.routes.js"));
@@ -19,7 +21,7 @@ app.use(function (req, res) {
     if (res.status(404)) {
         res.send({
             error: -2,
-            descripcion: `ruta ${req.path} método ${req.method} no implementada`,
+            descripción: `ruta ${req.path} método ${req.method} no implementada`,
         });
     }
 });
@@ -30,6 +32,6 @@ app.listen(PORT, () => {
         `Server listening on ${PORT}`
     );
 })
-.on("error", (err) => {
-    console.log(err);
-});
+    .on("error", (err) => {
+        console.log(err);
+    });
