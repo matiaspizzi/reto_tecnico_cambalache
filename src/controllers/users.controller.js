@@ -14,7 +14,7 @@ class UserController {
                     t.enum('favourite_language', ['JavaScript', 'Python', 'Java', '.Net', 'PHP']);
                     t.string('password', 100).notNullable();
                 }).then(() => {
-                    console.log('Users table created')
+                    console.log('* Table created "users"')
                 }).catch((err) => {
                     console.log(err)
                     throw err

@@ -12,7 +12,7 @@ class LogHistoryController {
                     t.enum('type', ['login', 'logout', 'signup']).notNullable();
                     t.string('user_id').notNullable();
                 }).then(() => {
-                    console.log('log_history table created')
+                    console.log('* Table created "log_history"')
                 }).catch((err) => {
                     console.log(err)
                     throw err

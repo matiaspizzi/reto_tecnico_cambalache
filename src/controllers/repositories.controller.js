@@ -13,7 +13,7 @@ class RepositoriesController {
                     t.datetime('created_at').defaultTo(knex.fn.now()).notNullable();
                     t.string('description', 100);
                 }).then(() => {
-                    console.log('Repositories table created')
+                    console.log('* Table created "repositories" ')
                 }).catch((err) => {
                     console.log(err)
                     throw err
