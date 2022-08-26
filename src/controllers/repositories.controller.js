@@ -1,18 +1,19 @@
-const knex = require('../db/database')
+const knex = require('../db/database');
 
 class RepositoriesController{
     constructor(){
+        this.table = 'repositories'
 
         knex.schema.hasTable('repositories').then(function(exists) {
             if (!exists) {
-                return knex.schema.createTable('users', function(t) {
+                return knex.schema.createTable('repositories', function(t) {
                     t.increments('id').primary();
                     t.string('projectName', 100).notNullable();
                     t.enum('languaje', ['JavaScript', 'Python']).notNullable();
                     t.date('createdAt', 100).notNullable();
                     t.string('description', 100);
                 }).then(() => {
-                    console.log('Users table created')
+                    console.log('Repositories table created')
                 }).catch((err) => {
                     console.log(err)
                     throw err
@@ -23,16 +24,25 @@ class RepositoriesController{
 
     async getAll(){
         try{
-            return await knex.from(`${this.tabla}`).select("*")
+            return await knex.from(`${this.table}`).select("*")
         } catch(err) {
             console.log(err)
             throw err
         } 
     }
     
+    async getByName(name){
+        try{
+            return await knex.from(`${this.table}`).where({ projectName: name }).select()
+        } catch(err) {
+            console.log(err)
+            throw err
+        }
+    }
+
     async getById(id){
         try{
-            return await knex.from(`${this.tabla}`).where({ id: id }).select()
+            return await knex.from(`${this.table}`).where({ id: id }).select()
         } catch(err) {
             console.log(err)
             throw err
@@ -41,7 +51,16 @@ class RepositoriesController{
     
     async save(obj){
         try{
-            return await knex(`${this.tabla}`).insert(obj)
+            return await knex(`${this.table}`).insert(obj)
+        } catch(err) {
+            console.log(err)
+            throw err
+        }
+    }
+
+    async update(obj, id){
+        try{
+            return await knex(`${this.table}`).update(obj).where({ id: id })
         } catch(err) {
             console.log(err)
             throw err
@@ -50,7 +69,7 @@ class RepositoriesController{
     
     async deleteById(id){
         try{
-            return await knex.from(`${this.tabla}`).where({ id: id }).del()
+            return await knex.from(`${this.table}`).where({ id: id }).del()
         } catch(err) {
             console.log(err)
             throw err
@@ -58,4 +77,6 @@ class RepositoriesController{
     }
 }
 
-module.exports = RepositoriesController
+let RepositoriesControllerInstance = new RepositoriesController()
+
+module.exports = RepositoriesControllerInstance

@@ -2,9 +2,9 @@ const knex = require('../db/database')
 
 class UserController{
     constructor(){
-        this.tabla = 'users'
+        this.table = 'users'
         
-        knex.schema.hasTable(`${this.tabla}`).then(function(exists) {
+        knex.schema.hasTable('users').then(function(exists) {
             if (!exists) {
                 return knex.schema.createTable('users', function(t) {
                     t.increments('id').primary();
@@ -25,7 +25,7 @@ class UserController{
 
     async getAll(){
         try{
-            return await knex.from(`${this.tabla}`).select("*")
+            return await knex.from(`${this.table}`).select("*")
         } catch(err) {
             console.log(err)
             throw err
@@ -34,7 +34,7 @@ class UserController{
     
     async getByEmail(email){
         try{
-            return await knex.from(`${this.tabla}`).where({ email: email }).select()
+            return await knex.from(`${this.table}`).where({ email: email }).select()
         } catch(err) {
             console.log(err)
             throw err
@@ -43,7 +43,7 @@ class UserController{
 
     async getById(id){
         try{
-            return await knex.from(`${this.tabla}`).where({ id: id }).select()
+            return await knex.from(`${this.table}`).where({ id: id }).select()
         } catch(err) {
             console.log(err)
             throw err
@@ -52,16 +52,16 @@ class UserController{
     
     async save(obj){
         try{
-            return await knex(`${this.tabla}`).insert(obj)
+            return await knex(`${this.table}`).insert(obj)
         } catch(err) {
             console.log(err)
             throw err
         }
     }
     
-    async update(obj){
+    async update(obj, id){
         try{
-            return await knex(`${this.tabla}`).update(obj).where({ email: obj.email })
+            return await knex(`${this.table}`).update(obj).where({ id: id })
         } catch(err) {
             console.log(err)
             throw err
@@ -70,7 +70,7 @@ class UserController{
 
     async deleteById(id){
         try{
-            return await knex.from(`${this.tabla}`).where({ id: id }).del()
+            return await knex.from(`${this.table}`).where({ id: id }).del()
         } catch(err) {
             console.log(err)
             throw err

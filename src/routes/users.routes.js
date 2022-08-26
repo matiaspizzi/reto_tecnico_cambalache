@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 
 const userController = require("../controllers/users.controller");
 
-router.get("/:id?", async (req, res) => {
+router
+.get("/:id?", async (req, res) => {
     const { id } = req.params;
     if (id) {
         const found = await userController.getById(id);
@@ -17,9 +18,9 @@ router.get("/:id?", async (req, res) => {
         const all = await userController.getAll();
         res.send(all);
     }
-});
+})
 
-router.post("/", async (req, res) => {
+.post("/", async (req, res) => {
     const user = {
         name: req.body.name,
         email: req.body.email,
@@ -52,9 +53,9 @@ router.post("/", async (req, res) => {
     return res.status(400).json({
         error: "Error al guardar el usuario"
     });
-});
+})
 
-router.put("/:id", async (req, res) => {
+.put("/:id", async (req, res) => {
     const bodyId = req.body.id;
     if ( bodyId && bodyId !== req.params.id) {
         return res.status(400).json({
@@ -69,6 +70,12 @@ router.put("/:id", async (req, res) => {
             error: "Usuario no encontrado",
         });
     }
+    const emailFound = await userController.getByEmail(email);
+    if (emailFound[0]) {
+        return res.status(404).json({
+            error: "Email en uso",
+        });
+    }
     const user = {
         name: name || found[0].name,
         email: email || found[0].email,
@@ -76,7 +83,7 @@ router.put("/:id", async (req, res) => {
         favouriteLanguaje: favouriteLanguaje || found[0].favouriteLanguaje,
         password: password ? bcrypt.hashSync( password, 10 ) : found[0].password,
     }
-    const updated = await userController.update(user)
+    const updated = await userController.update(user, id)
     if (updated) {
         return res.send({
             user: user,
@@ -87,9 +94,9 @@ router.put("/:id", async (req, res) => {
     return res.status(400).json({
         error: "Error al actualizar el usuario"
     });
-});
+})
 
-router.delete("/:id", async (req, res) => {
+.delete("/:id", async (req, res) => {
     const { id } = req.params;
     const found = await userController.getById(id);
     if (!found[0]) {

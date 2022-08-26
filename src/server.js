@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 //Rutas
 app.use("/api/users", require("./routes/users.routes.js"));
-// app.use("/api/repositories", require("./routes/repositories.routes.js"));
+app.use("/api/repositories", require("./routes/repositories.routes.js"));
 // app.use("/api/login-history", require("./routes/loginHistory.routes.js"));
 app.use("/login", require("./routes/login.routes.js"));
 
@@ -34,4 +34,3 @@ server.listen(PORT, () => {
 .on("error", (err) => {
     console.log(err);
 });
-
