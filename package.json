@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "forever src/server.js"
+    "forever": "forever src/server.js",
+    "start": "node src/server.js"
   },
   "author": "Matias Pizzi",
   "license": "ISC",
