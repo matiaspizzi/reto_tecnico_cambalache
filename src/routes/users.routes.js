@@ -112,7 +112,7 @@ router
         const deleted = await userController.deleteById(id);
         if (deleted) {
             // Borra el token de redis
-            await redisClient.del(decoded.id.toString());
+            await redisClient.del(id.toString());
             return res.send({
                 msg: "Usuario eliminado"
             });
