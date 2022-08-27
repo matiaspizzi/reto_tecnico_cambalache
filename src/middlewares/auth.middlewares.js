@@ -7,7 +7,7 @@ async function verifyToken(req, res, next) {
     const token = req.headers["auth_token"];
     if (!token) {
         return res.status(401).json({
-            error: "Sesión expirada"
+            error: "Se requiere token de autenticación"
         });
     }
     jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, decoded) => {
