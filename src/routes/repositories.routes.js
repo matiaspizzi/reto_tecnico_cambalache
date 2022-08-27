@@ -72,11 +72,13 @@ router
                 error: "Repositorio no encontrado",
             });
         }
-        const nameFound = await repositoriesController.getByName(project_name);
-        if (nameFound[0]) {
-            return res.status(404).json({
-                error: "Nombre en uso",
-            });
+        if(project_name){
+            const nameFound = await repositoriesController.getByName(project_name);
+            if (nameFound[0]) {
+                return res.status(404).json({
+                    error: "Nombre en uso",
+                });
+            }
         }
         const repository = {
             project_name: project_name || found[0].project_name,
