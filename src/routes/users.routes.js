@@ -72,11 +72,13 @@ router
                 error: "Usuario no encontrado",
             });
         }
-        const emailFound = await userController.getByEmail(email);
-        if (emailFound[0]) {
-            return res.status(404).json({
-                error: "Email en uso",
-            });
+        if(email){
+            const emailFound = await userController.getByEmail(email);
+            if (emailFound[0]) {
+                return res.status(404).json({
+                    error: "Email en uso",
+                });
+            }
         }
         const user = {
             name: name || found[0].name,
