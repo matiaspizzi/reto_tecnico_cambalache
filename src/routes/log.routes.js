@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
     });
 
     return res.send({
-        accessToken,
+        auth_token: accessToken,
         user: user[0]
     });
 })
