@@ -5,6 +5,8 @@ const verifyToken = require("../middlewares/auth.middlewares");
 const userController = require("../controllers/users.controller");
 const logHistoryController = require("../controllers/logHistory.controller");
 
+const redisClient = require("../db/redis.config");
+
 router
     .get("/:id?", verifyToken, async (req, res) => {
         const { id } = req.params;
@@ -109,6 +111,8 @@ router
         }
         const deleted = await userController.deleteById(id);
         if (deleted) {
+            // Borra el token de redis
+            await redisClient.del(decoded.id.toString());
             return res.send({
                 msg: "Usuario eliminado"
             });
